@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 
+import os
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -119,6 +121,102 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
+
+# Logging
+if not  os.path.exists('log'):
+    os.makedirs('log')
+
+APP_LOG_FILENAME =  BASE_DIR / 'log/app.log'
+
+ERROR_LOG_FILENAME = BASE_DIR / 'log/error.log'
+
+WARNING_LOG_FILENAME = BASE_DIR / 'log/warning.log'
+
+LOGFILE_SIZE = 20 * 1024 * 1024
+
+LOGFILE_COUNT = 5
+
+LOGFILE_APP = 'SimpleGroceryList'
+
+ACCOUNT_LOGFILE = 'Accounts'
+
+GROCERY_LIST_LOGFILE = 'GroceryList'
+
+LOGGING = {
+    'version' : 1,
+    'disable_existing_loggers': False,
+    'formatters' : {
+        'standard' : {
+            'format' : "[%(asctime)s] %(levelname)s [%(filename)s:%(lineno)s] %(message)s",
+            'datemt' : "%d-%b-%Y %H:%M:%S"
+        }
+    },
+    'filters' : {
+        'require_debug_false' : {
+            '()' : 'django.utils.log.RequireDebugFalse'
+        }
+    },
+    'handlers' : {
+        'console' : {
+            'level' : 'INFO',
+            'class' : 'logging.StreamHandler'
+        },
+        'mail_admins' : {
+            'level' : 'INFO',
+            'filters' : ['require_debug_false'],
+            'class' : 'django.utils.log.AdminEmailHandler'
+        },
+        'applog' : {
+            'level' : 'INFO',
+            'class' : 'logging.handlers.RotatingFileHandler',
+            'filename' : APP_LOG_FILENAME,
+            'maxBytes' : LOGFILE_SIZE,
+            'backupCount' : LOGFILE_COUNT,
+            'formatter' : 'standard',
+        },
+        'errorlog' : {
+            'level' : 'ERROR',
+            'class' : 'logging.handlers.RotatingFileHandler',
+            'filename' : ERROR_LOG_FILENAME,
+            'maxBytes' : LOGFILE_SIZE,
+            'backupCount' : LOGFILE_COUNT,
+            'formatter' : 'standard',            
+        },
+        'warninglog' : {
+            'level' : 'INFO',
+            'class' : 'logging.handlers.RotatingFileHandler',
+            'filename' : WARNING_LOG_FILENAME,
+            'maxBytes' : LOGFILE_SIZE,
+            'backupCount' : LOGFILE_COUNT,
+            'formatter' : 'standard',                        
+        }
+    },
+    'loggers' : {
+        'django.request' : {
+            'handlers' : ['mail_admins'],
+            'level' : 'INFO',
+            'propagate' : True
+        },
+        LOGFILE_APP : {
+            'handlers' : ['applog', 'errorlog', 'warninglog'],
+            'level' : 'INFO',
+            'propagate' : True
+        },
+        ACCOUNT_LOGFILE : {
+            'handlers' : ['applog', 'errorlog', 'warninglog'],
+            'level' : 'INFO',
+            'propagate' : True
+        },
+        GROCERY_LIST_LOGFILE : {
+            'handlers' : ['applog', 'errorlog', 'warninglog'],
+            'level' : 'INFO',
+            'propagate' : True
+        }
+
+    }
+}
+
 
 
 # Static files (CSS, JavaScript, Images)

@@ -1,0 +1,13 @@
+{% extends 'GroceryList/index.html' %}
+
+{% block workingAreaHeader %} / <a href="/products">Products</a> {% block productCategory %}{% endblock productCategory %} {% endblock workingAreaHeader %}
+
+{% block working-area-body %}
+<p>Product Categories:</p>
+<div class="product-container">
+    <div class="product-container-item">All</div>
+    {% for product_category in product_categories %}
+    <div class="product-container-item" id="product-category-{{product_category.pk}}" onclick='get_products(this)'>{{product_category.name}}</div>
+    {% endfor %}
+</div>
+{% endblock %}
