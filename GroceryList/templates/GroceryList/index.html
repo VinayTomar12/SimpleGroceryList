@@ -1,5 +1,54 @@
-
+{% load static %}
 {% include 'GroceryList/base.html' %}
 
-<h1>My Lists</h1>
-
+{% block layout %}
+<div class="app-container">
+    <header class="app-container-item app-header">
+        <nav class="nav-bar">
+            <ul class="navbar-item-group nav-group-1">
+                <!-- <li><svg class="menu_icon" width="22" height="22" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M4.5 5h15a.5.5 0 1 1 0 1h-15a.5.5 0 0 1 0-1zm0 6h15a.5.5 0 1 1 0 1h-15a.5.5 0 1 1 0-1zm0 6h15a.5.5 0 1 1 0 1h-15a.5.5 0 1 1 0-1z"></path></svg></li> -->
+                <li><a href="/">Home</a></li>
+            </ul>
+            <ul class="navbar-item-group nav-group-2">
+                <li><a href="#helper-menu">Help</a></li>
+                <li><a href="#profile-menu">Profile</a></li>
+            </ul>
+        </nav>
+    </header>
+    <section class="app-container-item app-side-menu">
+        <div class="side-menu-items">
+            <div class="side-menu-item">
+                <a href="{% url 'products' %}">Products</a>
+            </div>
+            <div class="side-menu-item">
+                <a href="#">Active Lists</a>
+            </div>
+            <div class="side-menu-item">
+                <a href="#">List Categories</a>
+                <div class="side-menu-sub-items">
+                    <ul>
+                        <li class="side-menu-sub-item"><a href="{% url 'list_category_all' %}">All</a></li>
+                        {% for category in list_categories %}
+                        <li class="side-menu-sub-item"><a href="{% url 'list_category' pk=category.pk %}">{{category.name}}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="app-container-item app-working-area">
+        <!-- <h1>Home / My Lists / All</h1> -->
+        <div class="working-area-header">
+            <h3>Home {% block workingAreaHeader %}{% endblock %}</h3>
+        </div>
+        <div class="working-area-description">
+            {% block workingAreaDescription %}{% endblock %}
+        </div>
+        <div class="working-area-body">
+            {% block working-area-body %}
+            <p class="big-text">Welcome <span class="text-color-primary">{{user.first_name}}</span>,</p>
+            {% endblock %}
+        </div>
+    </section>
+</div>
+{% endblock %}

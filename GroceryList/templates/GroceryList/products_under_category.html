@@ -1,0 +1,20 @@
+{% extends 'GroceryList/products.html' %}
+
+{% block productCategory %} / {{ product_category.name }} {% endblock %}
+
+{% block workingAreaDescription %}
+    <p><em>{{product_category.description}}</em></p>
+{% endblock %}
+
+{% block working-area-body %}
+{% if products %}
+    <div class="product-container">
+        {% for product in products %}
+        <div class="product-container-item" id="product-{{product_category.pk}}">{{product.name}}</div>
+        {% endfor %}
+    </div>
+{% else %}
+    <p>No {{product_category.name}} products available.</p>
+{% endif %}
+
+{% endblock %}
